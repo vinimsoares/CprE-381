@@ -1,0 +1,62 @@
+-----------------------------------------------------
+--Vinicius Malaman Soares
+--Iowa State University
+--Sep, 2024
+-----------------------------------------------------
+--Test bench for a basic full adder
+
+library IEEE;
+use IEEE.std_logic_1164;
+
+entity tb_adder is
+	generic(gCLK_HPER	: time := 10 ns);
+end tb_adder;
+
+architecture mixed of tb_adder is
+--Component declared in my_adder.vhd
+component my_adder is
+	port(i_S0,i_S1,i_Cin	: in std_logic;
+	     o_Sum,o_Cout	: out std_logic);
+end component;
+
+signal CLK, reset	: std_logic := '0';
+
+signal s_S0,s_S1,S_Cin	: std_logic;
+signal s_Sum, s_Cout	: std_logic;
+
+begin
+	DUT0: my_adder
+	port map(i_S0=>s_S0,i_S1=>s_S1,i_Cin=>s_Cin,o_Sum=>s_Sum,o_Cout=>s_Cout);
+
+--first process is to setup the CLK
+P_CLK: process
+begin
+	CLK<='1';
+	wait for gCLK_HPER;
+	CLK<= '0';
+	wait for gCLK_HPER;
+end process;
+--second set the reset
+P_RST: process
+begin 
+	reset<='0';
+	wait for gCLK_HPER/2;
+	reset<='1';
+	wait for gCLK_HPER*2;
+	reset <= '0';
+	wait;
+end process;
+
+P_TEST_CASES: process
+begin
+	wait for gCLK_HPER/2;
+
+	--Test one, 1+0+ no Cin
+	s_S0<='1';
+	s_S1<='0';
+	s_Cin<='0';
+	wait for gCLK_HPER*2;
+
+end process;
+
+end mixed;

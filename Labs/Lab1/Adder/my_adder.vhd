@@ -1,0 +1,55 @@
+---------------------------------------------------------
+--Vinicius Malaman Soares
+--Iowa State University
+--Sep, 2024
+---------------------------------------------------------
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+entity my_adder is
+	port(i_S0,i_S1,i_Cin	: in std_logic;
+	     o_Sum,o_Cout	: out std_logic);
+end my_adder;
+
+architecture structure of my_adder is
+
+--Components are definied in andg2.vhd,xorg2.vhd and org2.vhd respectively 
+component andg2 is
+	port(i_A,i_B	: in std_logic;
+	     o_F	: out std_logic);
+end component;
+
+component xorg2 is
+	port(i_A,i_B	: in std_logic;
+	     o_F	: out std_logic);
+end component;
+
+component org2 is	
+	port(i_A,i_B	: in std_logic;
+	     o_F	: out std_logic);
+end component;
+
+--wire from xor1 to and1 and to the second xor
+signal s_xa	:std_logic;
+--wire from and1 to or
+signal s_ao1	:std_logic;
+--wire from and2 to or
+signal s_ao2	:std_logic;
+
+begin
+
+g_xor1: xorg2
+	port map(i_A=>i_S0,i_B=>i_S1,o_F=>s_xa);
+g_xor2: xorg2
+	port map(i_A=>i_Cin,i_B=>s_xa,o_F=>o_Sum);
+
+g_and1 : andg2
+	port map(i_A=>s_xa,i_B=>i_Cin,o_F=>s_ao1);
+g_and2: andg2
+	port map(i_A=>i_S0,i_B=>i_S1,o_F=>s_ao2);
+
+g_or: org2
+	port map(i_A=>s_ao1,i_B=>s_ao2,o_F=>o_Cout);
+
+
+end structure;

@@ -1,0 +1,71 @@
+-------------------------------------------------
+--Vinicius Malaman Soares
+--Iowa State University
+--Sep, 2024
+--------------------------------------------------
+--Test Bench for a n-bit one's complement
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+use IEEE.std_logic_textio.all;
+
+entity tb_onescomp_n is
+	generic(gCLK_HPER	: time := 10 ns);
+end tb_onescomp_n;
+
+architecture mixed of tb_onescomp_n is
+
+component onescomp_n is
+	generic(N: integer := 32);
+	port(i_I	: in std_logic_vector(N-1 downto 0);
+	     o_O	:out std_logic_vector(N-1 downto 0));
+end component;
+
+signal CLK, reset	: std_logic := '0';
+
+constant N : integer := 32;
+
+signal s_I	:std_logic_vector(N-1 downto 0);
+signal s_O	:std_logic_vector(N-1 downto 0);
+
+
+begin
+	DUT0: onescomp_n
+	port map(i_I=>s_I,o_O=>s_O);
+
+--first process is to setup the CLK
+P_CLK: process
+begin
+	CLK<='1';
+	wait for gCLK_HPER;
+	CLK<= '0';
+	wait for gCLK_HPER;
+end process;
+--second set the reset
+P_RST: process
+begin 
+	reset<='0';
+	wait for gCLK_HPER/2;
+	reset<='1';
+	wait for gCLK_HPER*2;
+	reset <= '0';
+	wait;
+end process;
+
+P_TESTS_CASES: process
+begin
+	wait for gCLK_HPER/2;
+
+	s_I<=x"F0F0F0FF";
+	wait for gCLK_HPER*2;
+	
+	s_I<=x"FFFFFFFF";
+	wait for gCLK_HPER*2;
+	
+	s_I<=x"A823BDF6";
+	wait for gCLK_HPER*2;
+
+
+end process;
+
+end mixed;
