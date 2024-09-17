@@ -27,7 +27,7 @@ j EXIT
 L4: blt $a0, 65, L5
 la $v0, str4
 j EXIT
-la $v0, str5
+L5:la $v0, str5
 
 EXIT:
 
@@ -37,10 +37,7 @@ EXIT:
 
 #addu $s1, $s0, $s1
 
-# Print output
-#li $v0, 1
-#addi $a0, $s1, 0
-#syscall
+
 # Exit program
 li $v0, 10
 syscall
