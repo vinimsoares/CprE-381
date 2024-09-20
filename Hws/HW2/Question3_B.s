@@ -1,5 +1,5 @@
 .data
-str2: .asciiz ""
+str2: .asciiz "VInicius"
 dest: .space 20 #allocate space for dest
 .align 2
 .text
