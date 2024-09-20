@@ -2,13 +2,16 @@
 #include <stdlib.h>
 
 //Name it differtly to avoid conflict with std librarys
-void strcpy_new(char *dest, const char* src){
+char * strcpy_new(char *dest, const char* src){
+
+    char *value = dest;
     while(*src != '\0'){
         *dest = *src;
         dest++;
         src++;
     }
-    return;
+    *dest = '\0';
+    return value;
 }
 
 
@@ -21,6 +24,10 @@ int main(){
     strcpy_new(dest, src);
 
     printf("Source: %s\n", src);
+    printf("Destination: %s\n", dest);
+
+    strcpy_new(dest, "Second try");
+
     printf("Destination: %s\n", dest);
 
 
