@@ -1,6 +1,9 @@
 .data
+var1: .word 1
+var2: .word 2
 
 .align 2
+
 
 
 .text
@@ -8,8 +11,12 @@
 
 main:
 
-    lw $a0, 0($s0)
-    lw $a1, 0($s1)
+    la $s0, var1
+    la $s1, var2
+
+
+    la $a0, 0($s0)
+    la $a1, 0($s1)
 
     jal swap
 
@@ -30,6 +37,7 @@ swap:
 
     sw $t1, 0($a0) #save second value in first argument
     sw $t0, 0($a1) #save first value in second argument
+    move $v0, $a0
 
     jr $ra
 
