@@ -4,7 +4,9 @@
 .globl main
 
 main:
-li $a0, 6
+
+#enter value to test fib
+li $a0, 3
 jal fibonacci
 
 addi		$v0, $0, 1		# system call #1 - print int
