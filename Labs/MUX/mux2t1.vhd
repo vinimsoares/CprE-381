@@ -1,0 +1,70 @@
+-------------CPRE-381-----------------------
+--Vinicius Malaman Soares
+--Iowa State University
+--Aug,2024
+--------------------------------------------
+
+
+library IEEE;
+use IEEE.std_logic_1164.all;
+
+
+entity mux2t1 is
+
+   port(i_D0,i_D1	: in std_logic;
+	i_S 	: in std_logic;
+	o_O	: out std_logic);
+
+end mux2t1;
+
+architecture structure of mux2t1 is
+--Components were defined in andg2.vhd,invg.vhd and org2.vhd. 
+component andg2
+  port(i_A          : in std_logic;
+       i_B          : in std_logic;
+       o_F          : out std_logic);
+end component;
+
+component invg
+  port(i_A          : in std_logic;
+       o_F          : out std_logic);
+end component;
+
+component org2
+  port(i_A          : in std_logic;
+       i_B          : in std_logic;
+       o_F          : out std_logic);
+end component;
+--carry the negated controll bit
+signal s_w	:std_logic;
+--cary the result of the And gate one
+signal s_x 	:std_logic;
+--carry the result of And gate two
+signal s_wx	:std_logic;
+
+begin
+
+------------------------------------------------------------------
+--First connect the ports of the mux's inputs to the logic gates
+------------------------------------------------------------------
+g_not: invg
+  port MAP(i_A		=>i_S,
+	   o_F		=>s_w);
+
+g_And1: andg2
+  port MAP(i_A		=>i_D0,
+	   i_B		=>s_w,
+	   o_F		=>s_x);
+g_And2: andg2
+  port MAP(i_A		=>i_D1,
+	   i_B		=>i_S,
+	   o_F		=>s_wx);
+------------------------------------------------------------------
+--Now connect everything to the or gate
+------------------------------------------------------------------
+g_Or: org2
+  port MAP(i_A		=>s_x,
+	   i_B		=>s_wx,
+	   o_F		=>o_O);
+end structure;
+
